@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Revenue Accelerator</title>
+<style>
+  :root {
+    --bg: #0a0e17;
+    --card: #111827;
+    --card-border: #1f2937;
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+    --gold: #d4a843;
+    --gold-dim: #a07830;
+    --green: #22c55e;
+    --red: #ef4444;
+    --medevac: #002d52;
+    --arch3d: #0e7490;
+    --oneatlas: #4f46e5;
+    --radius: 12px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 16px 12px 60px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Header ── */
+  header {
+    text-align: center;
+    padding: 24px 0 8px;
+    border-bottom: 1px solid var(--card-border);
+    margin-bottom: 20px;
+  }
+  header h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, var(--gold), #f0d070);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  header .sub {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  header .sub .badge {
+    font-size: 0.65rem;
+    background: var(--gold-dim);
+    color: #fff;
+    padding: 2px 10px;
+    border-radius: 99px;
+    font-weight: 600;
+    -webkit-text-fill-color: #fff;
+  }
+  #lastUpdated {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 6px;
+    opacity: 0.7;
+  }
+
+  /* ── Layout ── */
+  .dashboard {
+    max-width: 640px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* ── Venture Card ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+    border-radius: var(--radius) 0 0 var(--radius);
+  }
+  .card.medevac::before { background: var(--medevac); }
+  .card.arch3d::before { background: var(--arch3d); }
+  .card.oneatlas::before { background: var(--oneatlas); }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-left: 4px;
+  }
+  .card-header h2 {
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+  .card-header .accent-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .card.medevac .accent-dot { background: var(--medevac); }
+  .card.arch3d .accent-dot { background: var(--arch3d); }
+  .card.oneatlas .accent-dot { background: var(--oneatlas); }
+
+  /* ── Revenue Row ── */
+  .rev-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding-left: 4px;
+  }
+  .rev-field {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .rev-field label {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+  }
+  .rev-field input {
+    background: #1a2332;
+    border: 1px solid #2a3344;
+    border-radius: 6px;
+    padding: 8px 10px;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    outline: none;
+    transition: border 0.2s;
+    width: 100%;
+  }
+  .rev-field input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 2px rgba(212,168,67,0.15);
+  }
+  .rev-field input::placeholder { color: #475569; font-weight: 400; }
+
+  /* ── Progress Bar ── */
+  .progress-section {
+    padding-left: 4px;
+    margin-bottom: 10px;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    margin-bottom: 4px;
+  }
+  .progress-label .pct {
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .progress-label .gap {
+    color: var(--text-muted);
+  }
+  .progress-bar {
+    height: 8px;
+    background: #1a2332;
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+  .progress-bar .fill.over { background: linear-gradient(90deg, var(--green), #4ade80); }
+
+  /* ── WoW Delta ── */
+  .wow-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-left: 4px;
+    margin-bottom: 12px;
+    font-size: 0.78rem;
+  }
+  .wow-row .label { color: var(--text-muted); }
+  .wow-row .delta { font-weight: 700; }
+  .wow-row .delta.pos { color: var(--green); }
+  .wow-row .delta.neg { color: var(--red); }
+  .wow-row .delta.zero { color: var(--text-muted); }
+
+  /* ── Weekly Goals ── */
+  .goals-section {
+    border-top: 1px solid #1e293b;
+    padding-top: 10px;
+    padding-left: 4px;
+  }
+  .goals-section h3 {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .goal-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 0;
+    font-size: 0.82rem;
+  }
+  .goal-row input[type="checkbox"] {
+    appearance: none;
+    width: 18px; height: 18px;
+    border: 2px solid #334155;
+    border-radius: 4px;
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+    transition: all 0.2s;
+  }
+  .goal-row input[type="checkbox"]:checked {
+    background: var(--gold);
+    border-color: var(--gold);
+  }
+  .goal-row input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: -2px; left: 2px;
+    font-size: 14px;
+    color: #0a0e17;
+    font-weight: 700;
+  }
+  .goal-row .goal-text {
+    flex: 1;
+    color: var(--text);
+    transition: opacity 0.2s;
+  }
+  .goal-row .goal-text.done {
+    opacity: 0.35;
+    text-decoration: line-through;
+  }
+  .goal-row .goal-count {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    min-width: 24px;
+    text-align: right;
+  }
+
+  /* ── Today's Priority ── */
+  .priority-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-top: 4px;
+  }
+  .priority-card h3 {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--gold);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .priority-card input {
+    background: #1a2332;
+    border: 1px solid #2a3344;
+    border-radius: 6px;
+    padding: 10px 12px;
+    color: var(--text);
+    font-size: 0.92rem;
+    width: 100%;
+    outline: none;
+    transition: border 0.2s;
+  }
+  .priority-card input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 2px rgba(212,168,67,0.15);
+  }
+  .priority-card input::placeholder { color: #475569; }
+
+  /* ── Total Summary Bar ── */
+  .summary-bar {
+    background: linear-gradient(135deg, #111827, #1a2332);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .summary-bar .total-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+  }
+  .summary-bar .total-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--gold);
+  }
+
+  /* ── Reset Button ── */
+  .reset-btn {
+    background: none;
+    border: 1px solid #334155;
+    color: var(--text-muted);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    align-self: flex-end;
+  }
+  .reset-btn:hover {
+    border-color: var(--red);
+    color: var(--red);
+  }
+  .footer-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 4px;
+  }
+
+  /* ── Empty State ── */
+  .empty-hint {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    padding: 20px 0 8px;
+    opacity: 0.5;
+  }
+
+  @media (max-width: 400px) {
+    body { padding: 12px 8px 60px; }
+    .card { padding: 12px; }
+    .rev-row { grid-template-columns: 1fr; }
+    header h1 { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Revenue Accelerator</h1>
+  <div class="sub">
+    <span id="weekLabel">Week of ...</span>
+    <span class="badge">V0.1 · Manual Entry</span>
+  </div>
+  <div id="lastUpdated">—</div>
+</header>
+
+<div class="dashboard">
+
+  <!-- Summary Bar -->
+  <div class="summary-bar">
+    <div>
+      <div class="total-label">Combined Monthly Revenue</div>
+      <div class="total-value" id="totalRevenue">$0</div>
+    </div>
+    <div style="text-align:right">
+      <div class="total-label">vs Combined Target</div>
+      <div class="total-value" id="totalProgress" style="font-size:0.9rem">0%</div>
+    </div>
+  </div>
+
+  <!-- MEDEVAC Card -->
+  <div class="card medevac" data-venture="medevac">
+    <div class="card-header">
+      <h2><span class="accent-dot"></span> MEDEVAC UAV</h2>
+      <span style="font-size:0.65rem;color:var(--text-muted);background:#1a2332;padding:2px 8px;border-radius:99px">aerial medevac</span>
+    </div>
+    <div class="rev-row">
+      <div class="rev-field">
+        <label>Monthly Target ($)</label>
+        <input type="text" inputmode="numeric" class="target-input" placeholder="0" data-venture="medevac">
+      </div>
+      <div class="rev-field">
+        <label>This Month Revenue ($)</label>
+        <input type="text" inputmode="numeric" class="revenue-input" placeholder="0" data-venture="medevac">
+      </div>
+    </div>
+    <div class="progress-section">
+      <div class="progress-label">
+        <span><span class="pct" id="pct-medevac">0%</span></span>
+        <span class="gap" id="gap-medevac">Gap: $0</span>
+      </div>
+      <div class="progress-bar"><div class="fill" id="bar-medevac"></div></div>
+    </div>
+    <div class="wow-row">
+      <span class="label">WoW Δ</span>
+      <span class="delta zero" id="wow-medevac">+$0</span>
+      <span style="font-size:0.65rem;color:var(--text-muted)" id="wow-week-medevac">(vs last week)</span>
+      <input type="text" inputmode="numeric" class="wow-input" id="wow-input-medevac" placeholder="last wk rev" style="background:#1a2332;border:1px solid #2a3344;border-radius:4px;padding:3px 6px;color:var(--text);font-size:0.72rem;width:70px;font-variant-numeric:tabular-nums;outline:none;margin-left:auto">
+    </div>
+    <div class="goals-section">
+      <h3>This Week's Goals <span class="goal-summary" style="float:right;color:var(--gold);font-weight:600" id="goal-summary-medevac">0/7</span></h3>
+      <div id="goals-medevac"></div>
+    </div>
+  </div>
+
+  <!-- Architexture3D Card -->
+  <div class="card arch3d" data-venture="arch3d">
+    <div class="card-header">
+      <h2><span class="accent-dot"></span> Architexture3D</h2>
+      <span style="font-size:0.65rem;color:var(--text-muted);background:#1a2332;padding:2px 8px;border-radius:99px">3D assets</span>
+    </div>
+    <div class="rev-row">
+      <div class="rev-field">
+        <label>Monthly Target ($)</label>
+        <input type="text" inputmode="numeric" class="target-input" placeholder="0" data-venture="arch3d">
+      </div>
+      <div class="rev-field">
+        <label>This Month Revenue ($)</label>
+        <input type="text" inputmode="numeric" class="revenue-input" placeholder="0" data-venture="arch3d">
+      </div>
+    </div>
+    <div class="progress-section">
+      <div class="progress-label">
+        <span><span class="pct" id="pct-arch3d">0%</span></span>
+        <span class="gap" id="gap-arch3d">Gap: $0</span>
+      </div>
+      <div class="progress-bar"><div class="fill" id="bar-arch3d"></div></div>
+    </div>
+    <div class="wow-row">
+      <span class="label">WoW Δ</span>
+      <span class="delta zero" id="wow-arch3d">+$0</span>
+      <span style="font-size:0.65rem;color:var(--text-muted)" id="wow-week-arch3d">(vs last week)</span>
+      <input type="text" inputmode="numeric" class="wow-input" id="wow-input-arch3d" placeholder="last wk rev" style="background:#1a2332;border:1px solid #2a3344;border-radius:4px;padding:3px 6px;color:var(--text);font-size:0.72rem;width:70px;font-variant-numeric:tabular-nums;outline:none;margin-left:auto">
+    </div>
+    <div class="goals-section">
+      <h3>This Week's Goals <span class="goal-summary" style="float:right;color:var(--gold);font-weight:600" id="goal-summary-arch3d">0/7</span></h3>
+      <div id="goals-arch3d"></div>
+    </div>
+  </div>
+
+  <!-- OneAtlas Card -->
+  <div class="card oneatlas" data-venture="oneatlas">
+    <div class="card-header">
+      <h2><span class="accent-dot"></span> OneAtlas</h2>
+      <span style="font-size:0.65rem;color:var(--text-muted);background:#1a2332;padding:2px 8px;border-radius:99px">geospatial</span>
+    </div>
+    <div class="rev-row">
+      <div class="rev-field">
+        <label>Monthly Target ($)</label>
+        <input type="text" inputmode="numeric" class="target-input" placeholder="0" data-venture="oneatlas">
+      </div>
+      <div class="rev-field">
+        <label>This Month Revenue ($)</label>
+        <input type="text" inputmode="numeric" class="revenue-input" placeholder="0" data-venture="oneatlas">
+      </div>
+    </div>
+    <div class="progress-section">
+      <div class="progress-label">
+        <span><span class="pct" id="pct-oneatlas">0%</span></span>
+        <span class="gap" id="gap-oneatlas">Gap: $0</span>
+      </div>
+      <div class="progress-bar"><div class="fill" id="bar-oneatlas"></div></div>
+    </div>
+    <div class="wow-row">
+      <span class="label">WoW Δ</span>
+      <span class="delta zero" id="wow-oneatlas">+$0</span>
+      <span style="font-size:0.65rem;color:var(--text-muted)" id="wow-week-oneatlas">(vs last week)</span>
+      <input type="text" inputmode="numeric" class="wow-input" id="wow-input-oneatlas" placeholder="last wk rev" style="background:#1a2332;border:1px solid #2a3344;border-radius:4px;padding:3px 6px;color:var(--text);font-size:0.72rem;width:70px;font-variant-numeric:tabular-nums;outline:none;margin-left:auto">
+    </div>
+    <div class="goals-section">
+      <h3>This Week's Goals <span class="goal-summary" style="float:right;color:var(--gold);font-weight:600" id="goal-summary-oneatlas">0/7</span></h3>
+      <div id="goals-oneatlas"></div>
+    </div>
+  </div>
+
+  <!-- Today's Priority -->
+  <div class="priority-card">
+    <h3>🎯 Today's Priority</h3>
+    <input type="text" id="todayPriority" placeholder="What are you committing to today?" autocomplete="off">
+  </div>
+
+  <!-- Footer -->
+  <div class="footer-actions">
+    <span style="font-size:0.65rem;color:var(--text-muted)">Data saved automatically to this browser</span>
+    <button class="reset-btn" id="resetBtn">Reset All Data</button>
+  </div>
+  <div class="empty-hint">Enter your monthly targets &amp; revenue above — progress bars update live.</div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  const VENTURES = ['medevac', 'arch3d', 'oneatlas'];
+  const GOAL_LABELS = {
+    medevac: ['Outreach 5 prospects', 'Send 3 proposals', 'Review pipeline', 'Post 1 LinkedIn update', 'Review finances', 'Prep Monday agenda', 'Log this week\'s numbers'],
+    arch3d: ['Publish 2 new assets', 'Update 3 listings', 'Engage 5 customers', 'Review pricing page', 'Post 1 showcase', 'Backup source files', 'Log this week\'s numbers'],
+    oneatlas: ['Research 3 leads', 'Refine value prop', 'Update pricing', 'Create 1 sample product', 'Reach out to 5 contacts', 'Read 1 industry report', 'Log this week\'s numbers']
+  };
+  const STORAGE_KEY = 'revaccel_data';
+
+  // ── Default State ──
+  function defaultState() {
+    const s = { targets: {}, revenues: {}, wow: {}, goals: {}, priority: '' };
+    VENTURES.forEach(v => {
+      s.targets[v] = '';
+      s.revenues[v] = '';
+      s.wow[v] = '';
+      s.goals[v] = new Array(7).fill(false);
+    });
+    return s;
+  }
+
+  // ── Load / Save ──
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        // Ensure all ventures exist
+        VENTURES.forEach(v => {
+          if (!parsed.targets) parsed.targets = {};
+          if (!parsed.revenues) parsed.revenues = {};
+          if (!parsed.wow) parsed.wow = {};
+          if (!parsed.goals) parsed.goals = {};
+          if (parsed.targets[v] === undefined) parsed.targets[v] = '';
+          if (parsed.revenues[v] === undefined) parsed.revenues[v] = '';
+          if (parsed.wow[v] === undefined) parsed.wow[v] = '';
+          if (!parsed.goals[v] || parsed.goals[v].length !== 7) parsed.goals[v] = new Array(7).fill(false);
+        });
+        if (parsed.priority === undefined) parsed.priority = '';
+        return parsed;
+      }
+    } catch(e) { /* corrupt data, reset */ }
+    return defaultState();
+  }
+
+  function saveState(state) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    updateTimestamp();
+  }
+
+  function updateTimestamp() {
+    const el = document.getElementById('lastUpdated');
+    const now = new Date();
+    el.textContent = 'Last updated: ' + now.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+
+  // ── Week Label ──
+  function setWeekLabel() {
+    const now = new Date();
+    const dayOfWeek = now.getDay();
+    const diff = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Monday
+    const monday = new Date(now);
+    monday.setDate(now.getDate() - diff);
+    const opts = { month: 'short', day: 'numeric' };
+    document.getElementById('weekLabel').textContent = 'Week of ' + monday.toLocaleDateString('en-US', opts);
+  }
+
+  // ── Render Goals ──
+  function renderGoals(venture, state) {
+    const container = document.getElementById('goals-' + venture);
+    if (!container) return;
+    const labels = GOAL_LABELS[venture];
+    const checked = state.goals[venture];
+    let html = '';
+    checked.forEach((val, i) => {
+      const done = val ? 'done' : '';
+      html += '<div class="goal-row">'
+        + '<input type="checkbox" data-venture="' + venture + '" data-idx="' + i + '" ' + (val ? 'checked' : '') + '>'
+        + '<span class="goal-text ' + done + '">' + labels[i] + '</span>'
+        + '</div>';
+    });
+    container.innerHTML = html;
+
+    const doneCount = checked.filter(Boolean).length;
+    document.getElementById('goal-summary-' + venture).textContent = doneCount + '/7';
+  }
+
+  // ── Update Progress ──
+  function updateProgress(venture, state) {
+    const target = parseFloat(state.targets[venture]) || 0;
+    const revenue = parseFloat(state.revenues[venture]) || 0;
+    const pct = target > 0 ? Math.min((revenue / target) * 100, 200) : 0;
+    const gap = target > 0 ? Math.max(target - revenue, 0) : 0;
+
+    document.getElementById('pct-' + venture).textContent = (target > 0 ? Math.round((revenue / target) * 100) : 0) + '%';
+    document.getElementById('gap-' + venture).textContent = gap > 0 ? 'Gap: $' + gap.toLocaleString() : '✓ On target';
+
+    const bar = document.getElementById('bar-' + venture);
+    bar.style.width = pct + '%';
+    bar.classList.toggle('over', revenue >= target);
+
+    // WoW
+    const wow = parseFloat(state.wow[venture]) || 0;
+    const delta = revenue - wow;
+    const wowEl = document.getElementById('wow-' + venture);
+    const wowWeek = document.getElementById('wow-week-' + venture);
+    if (wow > 0) {
+      wowEl.textContent = (delta >= 0 ? '+' : '') + '$' + delta.toLocaleString();
+      wowEl.className = 'delta ' + (delta > 0 ? 'pos' : delta < 0 ? 'neg' : 'zero');
+      wowWeek.textContent = '(vs last week)';
+    } else {
+      wowEl.textContent = '—';
+      wowEl.className = 'delta zero';
+      wowWeek.textContent = '';
+    }
+
+    // Update total summary
+    updateTotal(state);
+  }
+
+  function updateTotal(state) {
+    let totalRev = 0, totalTarget = 0;
+    VENTURES.forEach(v => {
+      totalRev += parseFloat(state.revenues[v]) || 0;
+      totalTarget += parseFloat(state.targets[v]) || 0;
+    });
+    document.getElementById('totalRevenue').textContent = '$' + totalRev.toLocaleString();
+    const pct = totalTarget > 0 ? Math.round((totalRev / totalTarget) * 100) : 0;
+    document.getElementById('totalProgress').textContent = pct + '% of target';
+  }
+
+  // ── Populate Inputs from State ──
+  function populateInputs(state) {
+    VENTURES.forEach(v => {
+      const tInput = document.querySelector('.target-input[data-venture="' + v + '"]');
+      const rInput = document.querySelector('.revenue-input[data-venture="' + v + '"]');
+      const wInput = document.getElementById('wow-input-' + v);
+      if (tInput) tInput.value = state.targets[v];
+      if (rInput) rInput.value = state.revenues[v];
+      if (wInput) wInput.value = state.wow[v];
+      renderGoals(v, state);
+      updateProgress(v, state);
+    });
+    document.getElementById('todayPriority').value = state.priority || '';
+  }
+
+  // ── Collect State from Inputs ──
+  function collectState() {
+    const state = defaultState();
+    VENTURES.forEach(v => {
+      state.targets[v] = document.querySelector('.target-input[data-venture="' + v + '"]').value || '';
+      state.revenues[v] = document.querySelector('.revenue-input[data-venture="' + v + '"]').value || '';
+      state.wow[v] = document.getElementById('wow-input-' + v).value || '';
+      // Goals collected from checkboxes
+      const checks = document.querySelectorAll('#goals-' + v + ' input[type="checkbox"]');
+      state.goals[v] = Array.from(checks).map(c => c.checked);
+    });
+    state.priority = document.getElementById('todayPriority').value || '';
+    return state;
+  }
+
+  // ── Save & Refresh ──
+  function saveAndRefresh() {
+    const state = collectState();
+    saveState(state);
+    VENTURES.forEach(v => updateProgress(v, state));
+  }
+
+  // ── Reset ──
+  function resetAll() {
+    if (!confirm('Reset all revenue data? This cannot be undone.')) return;
+    const state = defaultState();
+    saveState(state);
+    populateInputs(state);
+  }
+
+  // ── Init ──
+  function init() {
+    setWeekLabel();
+    const state = loadState();
+    populateInputs(state);
+    updateTimestamp();
+
+    // Live save on any input change
+    document.addEventListener('input', function(e) {
+      if (e.target.matches('.target-input, .revenue-input, .wow-input, #todayPriority')) {
+        saveAndRefresh();
+      }
+    });
+
+    document.addEventListener('change', function(e) {
+      if (e.target.matches('#goals-medevac input[type="checkbox"], #goals-arch3d input[type="checkbox"], #goals-oneatlas input[type="checkbox"]')) {
+        saveAndRefresh();
+      }
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', resetAll);
+  }
+
+  // ── DOM Ready ──
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>

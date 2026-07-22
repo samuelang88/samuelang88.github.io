@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Samuel Ang — Venture Portfolio</title>
+<meta name="description" content="Samuel Ang's venture portfolio: MEDEVAC UAV, Architexture3D, OneAtlas. Autonomous drone services, 3D-printed architectural models, and geospatial intelligence.">
+<meta name="author" content="Samuel Ang">
+<meta property="og:title" content="Samuel Ang — Venture Portfolio">
+<meta property="og:description" content="Three ventures. One mission: building the future.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://samuelang88.github.io">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://samuelang88.github.io">
+<style>
+/* ===== Reset & Base ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: #0a0e17;
+  color: #e0e4ed;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== Typography ===== */
+h1, h2, h3, h4 { font-weight: 700; line-height: 1.2; }
+h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
+h2 { font-size: clamp(1.25rem, 3vw, 1.75rem); margin-bottom: 1rem; }
+h3 { font-size: 1.15rem; margin-bottom: 0.5rem; }
+p { margin-bottom: 1rem; color: #94a3b8; }
+a { color: #60a5fa; text-decoration: none; transition: color 0.2s; }
+a:hover { color: #93c5fd; }
+
+/* ===== Utilities ===== */
+.container { max-width: 960px; margin: 0 auto; padding: 0 1.5rem; }
+
+/* ===== Nav ===== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(10, 14, 23, 0.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+nav .container { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+nav .logo { font-weight: 800; font-size: 1.1rem; color: #f1f5f9; letter-spacing: 0.02em; }
+nav .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+nav .nav-links a { font-size: 0.8rem; font-weight: 500; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; transition: color 0.2s; }
+nav .nav-links a:hover { color: #f1f5f9; }
+
+/* ===== Hero ===== */
+.hero {
+  min-height: 90vh; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(160deg, #0a0e17 0%, #111827 40%, #0f172a 70%, #0a0e17 100%);
+  position: relative; overflow: hidden;
+  padding: 5rem 0 3rem;
+}
+.hero::before {
+  content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+  background: radial-gradient(ellipse at 25% 50%, rgba(59,130,246,0.06) 0%, transparent 50%),
+              radial-gradient(ellipse at 75% 50%, rgba(212,168,67,0.04) 0%, transparent 50%);
+  pointer-events: none;
+}
+.hero .container { position: relative; z-index: 1; text-align: center; }
+.hero h1 { margin-bottom: 0.5rem; }
+.hero h1 .accent { color: #3b82f6; }
+.hero .tagline { font-size: clamp(1rem, 2vw, 1.2rem); color: #64748b; max-width: 560px; margin: 0 auto 1.5rem; font-weight: 400; }
+.hero-stats {
+  display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap; margin-top: 2rem;
+}
+.hero-stat { text-align: center; }
+.hero-stat .num { font-size: 1.8rem; font-weight: 800; color: #f1f5f9; }
+.hero-stat .label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 0.15rem; }
+
+/* ===== Button ===== */
+.btn {
+  display: inline-block; padding: 0.75rem 2rem; border-radius: 8px;
+  font-weight: 600; font-size: 0.9rem; transition: all 0.25s; cursor: pointer;
+  border: none; text-decoration: none;
+}
+.btn-primary { background: #3b82f6; color: #fff; }
+.btn-primary:hover { background: #2563eb; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(59,130,246,0.3); }
+.btn-outline { background: transparent; color: #e0e4ed; border: 1px solid rgba(255,255,255,0.15); }
+.btn-outline:hover { border-color: #3b82f6; color: #60a5fa; transform: translateY(-1px); }
+
+/* ===== Sections ===== */
+section { padding: 4rem 0; }
+
+/* ===== Venture Grid ===== */
+#ventures { background: #0f172a; border-top: 1px solid rgba(255,255,255,0.04); }
+#ventures h2 { text-align: center; color: #f1f5f9; }
+#ventures .section-desc { text-align: center; font-size: 1rem; color: #64748b; max-width: 500px; margin: 0 auto 2.5rem; }
+
+.venture-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+
+.venture-card {
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 2rem 1.5rem;
+  display: flex; flex-direction: column;
+  transition: all 0.25s; position: relative; overflow: hidden;
+}
+.venture-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.venture-card.medevac::before { background: #002d52; }
+.venture-card.arch3d::before { background: #0e7490; }
+.venture-card.oneatlas::before { background: #4f46e5; }
+
+.venture-card:hover {
+  border-color: rgba(255,255,255,0.15);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+.venture-card .icon {
+  font-size: 2rem; margin-bottom: 0.75rem;
+  width: 48px; height: 48px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+}
+.venture-card.medevac .icon { background: rgba(0,45,82,0.3); }
+.venture-card.arch3d .icon { background: rgba(14,116,144,0.3); }
+.venture-card.oneatlas .icon { background: rgba(79,70,229,0.3); }
+
+.venture-card h3 { color: #f1f5f9; margin-bottom: 0.35rem; }
+.venture-card .desc { font-size: 0.85rem; color: #94a3b8; margin-bottom: 1.25rem; flex: 1; }
+
+.venture-card .status {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+  padding: 3px 10px; border-radius: 99px; margin-bottom: 1rem;
+  align-self: flex-start;
+}
+.venture-card .status.active {
+  background: rgba(34,197,94,0.12); color: #4ade80;
+}
+.venture-card .status.developing {
+  background: rgba(250,204,21,0.12); color: #facc15;
+}
+.venture-card .status.exploring {
+  background: rgba(148,163,184,0.12); color: #94a3b8;
+}
+
+.venture-card .links { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: auto; }
+.venture-card .links a {
+  font-size: 0.78rem; padding: 5px 12px; border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: all 0.2s; background: rgba(255,255,255,0.03);
+}
+.venture-card .links a:hover {
+  border-color: #3b82f6; color: #60a5fa; background: rgba(59,130,246,0.08);
+}
+
+/* ===== Tracker Section ===== */
+#tracker { background: #0a0e17; border-top: 1px solid rgba(255,255,255,0.04); text-align: center; padding: 3rem 0; }
+#tracker h2 { color: #f1f5f9; }
+#tracker p { font-size: 0.9rem; color: #64748b; max-width: 500px; margin: 0 auto 1.5rem; }
+
+/* ===== Footer ===== */
+footer {
+  background: #0a0e17; border-top: 1px solid rgba(255,255,255,0.04); padding: 1.5rem 0;
+  text-align: center; font-size: 0.8rem; color: #475569;
+}
+footer a { color: #64748b; }
+footer a:hover { color: #94a3b8; }
+footer .sep { margin: 0 0.5rem; color: #2a3344; }
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  nav .nav-links { display: none; }
+  .venture-grid { grid-template-columns: 1fr; }
+  .hero-stats { gap: 1.5rem; }
+}
+@media (max-width: 480px) {
+  .hero-stat .num { font-size: 1.4rem; }
+  section { padding: 2.5rem 0; }
+  .venture-card { padding: 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Nav ===== -->
+<nav>
+  <div class="container">
+    <div class="logo">Samuel Ang</div>
+    <ul class="nav-links">
+      <li><a href="#ventures">Ventures</a></li>
+      <li><a href="revenue-tracker/">Revenue</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ===== Hero ===== -->
+<section class="hero">
+  <div class="container">
+    <h1>Samuel Ang <span class="accent">—</span> Venture Portfolio</h1>
+    <p class="tagline">Three ventures. One mission: building durable, high-impact businesses from the ground up.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="num">3</div>
+        <div class="label">Active Ventures</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">3</div>
+        <div class="label">Live Websites</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">1</div>
+        <div class="label">Revenue Tracker</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Ventures ===== -->
+<section id="ventures">
+  <div class="container">
+    <h2>Ventures</h2>
+    <p class="section-desc">Each venture is independently operated with its own brand, site, and pitch deck.</p>
+
+    <div class="venture-grid">
+
+      <!-- MEDEVAC UAV -->
+      <div class="venture-card medevac">
+        <div class="icon">✈</div>
+        <div class="status active">● Active</div>
+        <h3>MEDEVAC UAV</h3>
+        <p class="desc">Autonomous long-endurance drone services for pipeline inspection, medical logistics, agriculture NDVI, and disaster response. 350 km range at $6.27/flight.</p>
+        <div class="links">
+          <a href="https://samuelang88.github.io/medevac-uav/">Site</a>
+          <a href="https://samuelang88.github.io/medevac-uav/pitch-deck.html">Pitch Deck</a>
+        </div>
+      </div>
+
+      <!-- Architexture3D -->
+      <div class="venture-card arch3d">
+        <div class="icon">🏛</div>
+        <div class="status active">● Active</div>
+        <h3>Architexture3D</h3>
+        <p class="desc">Premium 3D-printed architectural scale models delivered in 3–5 days at 1/3 the cost of traditional model shops. Studio, development, and master plan models.</p>
+        <div class="links">
+          <a href="https://samuelang88.github.io/architexture3d/">Site</a>
+        </div>
+      </div>
+
+      <!-- OneAtlas -->
+      <div class="venture-card oneatlas">
+        <div class="icon">🌍</div>
+        <div class="status active">● Active</div>
+        <h3>OneAtlas</h3>
+        <p class="desc">Geospatial intelligence platform delivering satellite imagery and analytics for defence, energy, agriculture, and insurance — powered by 30 cm VHR optical and 25 cm radar.</p>
+        <div class="links">
+          <a href="https://samuelang88.github.io/oneatlas/">Site</a>
+          <a href="https://samuelang88.github.io/oneatlas/presidential_dashboard.html">Dashboard</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== Revenue Tracker ===== -->
+<section id="tracker">
+  <div class="container">
+    <h2>Revenue Tracker</h2>
+    <p>Weekly revenue tracking dashboard with editable targets, progress bars, WoW deltas, and goal management for all three ventures.</p>
+    <a href="revenue-tracker/" class="btn btn-primary">Open Revenue Tracker →</a>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer>
+  Built by Samuel Ang <span class="sep">·</span>
+  <a href="mailto:samuelang88@gmail.com">samuelang88@gmail.com</a>
+  <span class="sep">·</span>
+  <a href="https://github.com/samuelang88">GitHub</a>
+</footer>
+
+</body>
+</html>
