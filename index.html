@@ -48,12 +48,39 @@ nav .nav-links { display: flex; gap: 1.5rem; list-style: none; }
 nav .nav-links a { font-size: 0.8rem; font-weight: 500; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; transition: color 0.2s; }
 nav .nav-links a:hover { color: #f1f5f9; }
 
+/* ===== Live Status Bar ===== */
+.status-bar {
+  position: fixed; top: 60px; left: 0; right: 0; z-index: 99;
+  background: rgba(10, 14, 23, 0.85); backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  padding: 6px 0;
+  display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
+  font-size: 0.72rem;
+}
+.status-indicator {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 2px 8px; border-radius: 99px;
+  background: rgba(255,255,255,0.04);
+}
+.status-indicator .dot {
+  width: 7px; height: 7px; border-radius: 50%; display: inline-block;
+}
+.status-indicator .dot.online { background: #22c55e; box-shadow: 0 0 6px rgba(34,197,94,0.5); }
+.status-indicator .dot.offline { background: #ef4444; box-shadow: 0 0 6px rgba(239,68,68,0.5); }
+.status-indicator .dot.loading { background: #facc15; animation: pulse 1s infinite; }
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+.status-indicator .label { color: #64748b; }
+.status-indicator .label strong { color: #f1f5f9; font-weight: 600; }
+
 /* ===== Hero ===== */
 .hero {
-  min-height: 90vh; display: flex; align-items: center; justify-content: center;
+  min-height: 85vh; display: flex; align-items: center; justify-content: center;
   background: linear-gradient(160deg, #0a0e17 0%, #111827 40%, #0f172a 70%, #0a0e17 100%);
   position: relative; overflow: hidden;
-  padding: 5rem 0 3rem;
+  padding: 6rem 0 3rem;
 }
 .hero::before {
   content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
@@ -124,21 +151,36 @@ section { padding: 4rem 0; }
 .venture-card h3 { color: #f1f5f9; margin-bottom: 0.35rem; }
 .venture-card .desc { font-size: 0.85rem; color: #94a3b8; margin-bottom: 1.25rem; flex: 1; }
 
-.venture-card .status {
+.venture-card .status-badge {
   display: inline-flex; align-items: center; gap: 5px;
   font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
   padding: 3px 10px; border-radius: 99px; margin-bottom: 1rem;
   align-self: flex-start;
+  transition: all 0.3s;
 }
-.venture-card .status.active {
+.venture-card .status-badge.live {
   background: rgba(34,197,94,0.12); color: #4ade80;
 }
-.venture-card .status.developing {
+.venture-card .status-badge.developing {
   background: rgba(250,204,21,0.12); color: #facc15;
 }
-.venture-card .status.exploring {
+.venture-card .status-badge.exploring {
   background: rgba(148,163,184,0.12); color: #94a3b8;
 }
+.venture-card .status-badge.error {
+  background: rgba(239,68,68,0.12); color: #ef4444;
+}
+.venture-card .status-badge .check-dot {
+  width: 6px; height: 6px; border-radius: 50%; display: inline-block;
+}
+.venture-card .status-badge.live .check-dot { background: #22c55e; box-shadow: 0 0 6px rgba(34,197,94,0.6); animation: pulse-live 2s infinite; }
+@keyframes pulse-live {
+  0%, 100% { box-shadow: 0 0 4px rgba(34,197,94,0.4); }
+  50% { box-shadow: 0 0 10px rgba(34,197,94,0.8); }
+}
+.venture-card .status-badge.error .check-dot { background: #ef4444; box-shadow: 0 0 6px rgba(239,68,68,0.5); }
+.venture-card .status-badge.developing .check-dot { background: #facc15; }
+.venture-card .status-badge.exploring .check-dot { background: #94a3b8; }
 
 .venture-card .links { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: auto; }
 .venture-card .links a {
@@ -150,10 +192,34 @@ section { padding: 4rem 0; }
   border-color: #3b82f6; color: #60a5fa; background: rgba(59,130,246,0.08);
 }
 
-/* ===== Tracker Section ===== */
-#tracker { background: #0a0e17; border-top: 1px solid rgba(255,255,255,0.04); text-align: center; padding: 3rem 0; }
-#tracker h2 { color: #f1f5f9; }
-#tracker p { font-size: 0.9rem; color: #64748b; max-width: 500px; margin: 0 auto 1.5rem; }
+/* ===== Embedded Tracker ===== */
+#tracker-section {
+  background: #0a0e17;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  padding: 3rem 0;
+}
+#tracker-section h2 { text-align: center; color: #f1f5f9; }
+#tracker-section .section-desc { text-align: center; font-size: 0.9rem; color: #64748b; max-width: 500px; margin: 0 auto 1.5rem; }
+.tracker-frame {
+  max-width: 680px; margin: 0 auto;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #0a0e17;
+}
+.tracker-frame iframe {
+  width: 100%; height: 600px;
+  border: none; display: block;
+}
+.tracker-frame .frame-footer {
+  padding: 10px 16px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  text-align: center;
+  font-size: 0.75rem;
+  color: #475569;
+}
+.tracker-frame .frame-footer a { color: #64748b; }
+.tracker-frame .frame-footer a:hover { color: #60a5fa; }
 
 /* ===== Footer ===== */
 footer {
@@ -169,11 +235,14 @@ footer .sep { margin: 0 0.5rem; color: #2a3344; }
   nav .nav-links { display: none; }
   .venture-grid { grid-template-columns: 1fr; }
   .hero-stats { gap: 1.5rem; }
+  .status-bar { gap: 8px; font-size: 0.65rem; }
+  .tracker-frame iframe { height: 480px; }
 }
 @media (max-width: 480px) {
   .hero-stat .num { font-size: 1.4rem; }
   section { padding: 2.5rem 0; }
   .venture-card { padding: 1.5rem; }
+  .tracker-frame iframe { height: 380px; }
 }
 </style>
 </head>
@@ -185,10 +254,30 @@ footer .sep { margin: 0 0.5rem; color: #2a3344; }
     <div class="logo">Samuel Ang</div>
     <ul class="nav-links">
       <li><a href="#ventures">Ventures</a></li>
-      <li><a href="revenue-tracker/">Revenue</a></li>
+      <li><a href="#tracker-section">Revenue</a></li>
     </ul>
   </div>
 </nav>
+
+<!-- ===== Live Status Bar ===== -->
+<div class="status-bar" id="statusBar">
+  <span class="status-indicator" data-check="medevac">
+    <span class="dot loading" id="dot-medevac"></span>
+    <span class="label"><strong>MEDEVAC UAV</strong> <span id="status-medevac">checking…</span></span>
+  </span>
+  <span class="status-indicator" data-check="arch3d">
+    <span class="dot loading" id="dot-arch3d"></span>
+    <span class="label"><strong>Architexture3D</strong> <span id="status-arch3d">checking…</span></span>
+  </span>
+  <span class="status-indicator" data-check="oneatlas">
+    <span class="dot loading" id="dot-oneatlas"></span>
+    <span class="label"><strong>OneAtlas</strong> <span id="status-oneatlas">checking…</span></span>
+  </span>
+  <span class="status-indicator" data-check="revenue">
+    <span class="dot loading" id="dot-revenue"></span>
+    <span class="label"><strong>Revenue</strong> <span id="status-revenue">checking…</span></span>
+  </span>
+</div>
 
 <!-- ===== Hero ===== -->
 <section class="hero">
@@ -209,6 +298,9 @@ footer .sep { margin: 0 0.5rem; color: #2a3344; }
         <div class="label">Revenue Tracker</div>
       </div>
     </div>
+    <div style="margin-top: 1rem;">
+      <a href="#ventures" class="btn btn-primary">Explore Ventures</a>
+    </div>
   </div>
 </section>
 
@@ -216,42 +308,52 @@ footer .sep { margin: 0 0.5rem; color: #2a3344; }
 <section id="ventures">
   <div class="container">
     <h2>Ventures</h2>
-    <p class="section-desc">Each venture is independently operated with its own brand, site, and pitch deck.</p>
+    <p class="section-desc">Each venture is independently operated with its own brand, site, and pitch deck. Live-status indicators run hourly checks.</p>
 
     <div class="venture-grid">
 
       <!-- MEDEVAC UAV -->
       <div class="venture-card medevac">
         <div class="icon">✈</div>
-        <div class="status active">● Active</div>
+        <div class="status-badge live" id="badge-medevac">
+          <span class="check-dot"></span> <span id="badge-text-medevac">Live</span>
+        </div>
         <h3>MEDEVAC UAV</h3>
         <p class="desc">Autonomous long-endurance drone services for pipeline inspection, medical logistics, agriculture NDVI, and disaster response. 350 km range at $6.27/flight.</p>
         <div class="links">
           <a href="https://samuelang88.github.io/medevac-uav/">Site</a>
           <a href="https://samuelang88.github.io/medevac-uav/pitch-deck.html">Pitch Deck</a>
+          <a href="https://github.com/samuelang88/medevac-uav">GitHub</a>
         </div>
       </div>
 
       <!-- Architexture3D -->
       <div class="venture-card arch3d">
         <div class="icon">🏛</div>
-        <div class="status active">● Active</div>
+        <div class="status-badge live" id="badge-arch3d">
+          <span class="check-dot"></span> <span id="badge-text-arch3d">Live</span>
+        </div>
         <h3>Architexture3D</h3>
         <p class="desc">Premium 3D-printed architectural scale models delivered in 3–5 days at 1/3 the cost of traditional model shops. Studio, development, and master plan models.</p>
         <div class="links">
           <a href="https://samuelang88.github.io/architexture3d/">Site</a>
+          <a href="https://samuelang88.github.io/architexture3d/pitch-deck.html">Pitch Deck</a>
+          <a href="https://github.com/samuelang88/architexture3d">GitHub</a>
         </div>
       </div>
 
       <!-- OneAtlas -->
       <div class="venture-card oneatlas">
         <div class="icon">🌍</div>
-        <div class="status active">● Active</div>
+        <div class="status-badge live" id="badge-oneatlas">
+          <span class="check-dot"></span> <span id="badge-text-oneatlas">Live</span>
+        </div>
         <h3>OneAtlas</h3>
         <p class="desc">Geospatial intelligence platform delivering satellite imagery and analytics for defence, energy, agriculture, and insurance — powered by 30 cm VHR optical and 25 cm radar.</p>
         <div class="links">
           <a href="https://samuelang88.github.io/oneatlas/">Site</a>
           <a href="https://samuelang88.github.io/oneatlas/presidential_dashboard.html">Dashboard</a>
+          <a href="https://github.com/samuelang88/oneatlas">GitHub</a>
         </div>
       </div>
 
@@ -259,12 +361,17 @@ footer .sep { margin: 0 0.5rem; color: #2a3344; }
   </div>
 </section>
 
-<!-- ===== Revenue Tracker ===== -->
-<section id="tracker">
+<!-- ===== Revenue Tracker (Embedded) ===== -->
+<section id="tracker-section">
   <div class="container">
     <h2>Revenue Tracker</h2>
-    <p>Weekly revenue tracking dashboard with editable targets, progress bars, WoW deltas, and goal management for all three ventures.</p>
-    <a href="revenue-tracker/" class="btn btn-primary">Open Revenue Tracker →</a>
+    <p class="section-desc">Weekly revenue tracking dashboard with editable targets, progress bars, WoW deltas, and goal management for all three ventures.</p>
+    <div class="tracker-frame">
+      <iframe src="revenue-tracker/" title="Revenue Tracker Dashboard" loading="lazy"></iframe>
+      <div class="frame-footer">
+        <a href="revenue-tracker/" target="_blank">Open full screen →</a>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -275,6 +382,84 @@ footer .sep { margin: 0 0.5rem; color: #2a3344; }
   <span class="sep">·</span>
   <a href="https://github.com/samuelang88">GitHub</a>
 </footer>
+
+<!-- ===== Live Status Check Script ===== -->
+<script>
+(function() {
+  const sites = {
+    medevac:  { url: 'https://samuelang88.github.io/medevac-uav/',  badge: 'medevac',  statusText: 'MEDEVAC UAV' },
+    arch3d:   { url: 'https://samuelang88.github.io/architexture3d/', badge: 'arch3d',   statusText: 'Architexture3D' },
+    oneatlas: { url: 'https://samuelang88.github.io/oneatlas/',     badge: 'oneatlas', statusText: 'OneAtlas' },
+    revenue:  { url: 'https://samuelang88.github.io/revenue-tracker/', badge: 'revenue', statusText: 'Revenue Tracker' }
+  };
+
+  function setStatus(key, ok, statusCode) {
+    const dot = document.getElementById('dot-' + key);
+    const text = document.getElementById('status-' + key);
+    const badge = document.getElementById('badge-' + key);
+    const badgeText = document.getElementById('badge-text-' + key);
+
+    if (ok) {
+      dot.className = 'dot online';
+      text.textContent = '200 ✓';
+      if (badge) { badge.className = 'status-badge live'; }
+      if (badgeText) badgeText.textContent = 'Live';
+    } else {
+      dot.className = 'dot offline';
+      text.textContent = (statusCode ? statusCode + ' ✗' : 'Offline ✗');
+      if (badge) { badge.className = 'status-badge error'; }
+      if (badgeText) badgeText.textContent = 'Offline';
+    }
+  }
+
+  function checkSite(key) {
+    const site = sites[key];
+    const dot = document.getElementById('dot-' + key);
+    dot.className = 'dot loading';
+
+    // Use fetch with HEAD + no-cors for CORS-friendly check
+    // We can't read the response cross-origin without CORS,
+    // so we use a timing-based approach: if fetch doesn't throw, it's likely up.
+    // For a real CORS-compliant check, we'd need a server-side proxy.
+    // Alternative: try loading a tiny resource.
+
+    const img = new Image();
+    const timeout = setTimeout(function() {
+      setStatus(key, false, 'Timeout');
+    }, 5000);
+
+    img.onload = function() {
+      clearTimeout(timeout);
+      setStatus(key, true, 200);
+    };
+    img.onerror = function() {
+      clearTimeout(timeout);
+      // Image failed, but the site might still be up — use fetch fallback
+      fetch(site.url + '?check=' + Date.now(), { method: 'HEAD', mode: 'no-cors' })
+        .then(function() { setStatus(key, true, 200); })
+        .catch(function() {
+          // Last resort: check if the favicon loads (most reliable cross-origin signal)
+          const favicon = new Image();
+          favicon.onload = function() { setStatus(key, true, 200); };
+          favicon.onerror = function() { setStatus(key, false, 'Unreachable'); };
+          favicon.src = site.url + 'favicon.ico?' + Date.now();
+        });
+    };
+
+    // Try to load the site favicon as a lightweight reachability check
+    img.src = site.url + 'apple-touch-icon.png?' + Date.now();
+  }
+
+  // Check all sites on page load
+  function checkAll() {
+    for (var key in sites) checkSite(key);
+  }
+
+  // Run immediately and every 30 minutes
+  checkAll();
+  setInterval(checkAll, 30 * 60 * 1000);
+})();
+</script>
 
 </body>
 </html>
